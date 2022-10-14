@@ -23,7 +23,7 @@ Instantiate(prefab1, pos, Quaternion.identity);
 调用全局函数Destroy
 
 Destroy (obj); //立即删除obj
-Destroy (obj, 5.0f); //3秒之后删除obj
+Destroy (obj, 5.0f); //5秒之后删除obj
 
 ## 延迟创建物体，而且让它有动态的效果
 **利用Invoke延迟动态创建**
