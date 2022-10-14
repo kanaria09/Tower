@@ -1,0 +1,54 @@
+亮考帮
+
+怎么在游戏过程中的创建和销毁物体？
+创建：
+public GameObject enemy;
+ 
+void Start() {
+    for (int i = 0; i < 5; i++) {
+        Instantiate(enemy);
+    }
+}
+
+销毁：
+void OnCollisionEnter(Collision otherObj) {
+    if (otherObj.gameObject.tag == "Missile") {
+        Destroy(gameObject,.5f);
+    }
+}
+
+怎么延迟创建物体，而且让它有动态的效果？
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+ 
+//一个隐藏的物体等待t秒后显示，updata计时器实现
+public class activeShow : MonoBehaviour {
+ 
+ public GameObject cube;
+ public int t;
+ private float m_timer=0;
+ 
+ // Use this for initialization
+ void Start () {
+ 
+ }
+ 
+ // Update is called once per frame
+ void Update () {
+ m_timer+=Time.deltaTime;
+ if(m_timer>5){
+  cube.SetActive(true);
+  m_timer=0;
+ }
+ }
+}
+
+怎么延迟的销毁物体？
+void Start()
+{
+    float time = 5.0f;//延时f秒
+
+    //3秒后销毁某个gameObject
+    Destroy(this.gameObject,time);
+}
