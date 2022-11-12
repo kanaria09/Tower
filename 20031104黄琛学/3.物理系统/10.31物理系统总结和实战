@@ -1,6 +1,19 @@
-课堂练习代码以及其产生的现象总结 using UnityEngine; public class Player : MonoBehaviour { Rigidbody rigid; int layerMask; // Start is called before the first frame update void Start() { rigid = GetComponent(); Debug.Log(rigid.gameObject.name); layerMask = LayerMask.GetMask("Water", "Player", "wape", "enemy"); // 设置重心 rigid.centerOfMass = new Vector3(0.5f, 1, 0.5f); Debug.Log("Center of Mass : " + rigid.centerOfMass.ToString()); } //private void FixedUpdate() //{ //Debug.Log("FixedUpdate delta time : " + Time.fixedDeltaTime);
+课堂练习代码以及其产生的现象总结：
+using UnityEngine; 
+public class Player : MonoBehaviour { 
+    Rigidbody rigid; int layerMask; 
+ // Start is called before the first frame update void Start() 
+    { rigid = GetComponent(); 
+      Debug.Log(rigid.gameObject.name); 
+      layerMask = LayerMask.GetMask("Water", "Player", "wape", "enemy"); // 设置重心 
+      rigid.centerOfMass = new Vector3(0.5f, 1, 0.5f); 
+      Debug.Log("Center of Mass : " + rigid.centerOfMass.ToString()); } 
+     //private void FixedUpdate() 
+     //{ 
+         //Debug.Log("FixedUpdate delta time : " + Time.fixedDeltaTime);
 
-// Update is called once per frame
+        // Update is called once per frame
+
 void Update() { //Debug.Log("Update delta time : " + Time.deltaTime);
 
    // 施加力使物体跳跃
@@ -82,18 +95,25 @@ void Update() { //Debug.Log("Update delta time : " + Time.deltaTime);
 
 静态碰撞体：
 不能动的，否则会出现问题
+
 刚体碰撞体：
 只受物理系统的控制，不建议通过随意控制
+
 运动学的刚体碰撞体：
 运动可以摆脱物理系统，由随意控制，碰撞还是由物理系统来控制
+
 触发器和碰撞体：
 触发器不会发生碰撞，是会穿过物体，碰撞体才会发生碰撞
+
 物理关节：
 限制一类运动的自由度，允许另外一类运动的自由度
+
 射线检测：
 通过将物体设置在不同的层，然后在脚本中为射线设置能检测的层的物体
+
 控制物体运动的方法：
 直接操作坐标，使用物理引擎操作，使用角色控制器
+
 物理系统的编程:
 获取刚体
 修改速度
@@ -104,3 +124,11 @@ FixedUpdate
 修改角速度
 质心
 刚体约束
+
+考考你
+发生碰撞的必要条件有哪些？
+参与碰撞的物体都必须添加碰撞器(Collider)组件
+其中一个物体还必须添加刚体组件(Rigidbody)
+
+帮帮我
+当检查两个物体发生碰撞时，如何让运动的物体停止运动？
