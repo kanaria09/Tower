@@ -1,0 +1,90 @@
+平移矩阵
+void Start(){
+        //创建平移，旋转和缩放矩阵
+        unityMatrix.SetTRS(transform.position, transform.rotation, transform.localScale);
+}
+void translate(){
+        //按照当前位置进行位移
+        Vector4 v4 = new Vector4(transform.position.x, transform.position.y, transform.position.z, 1);
+        //它的主对角线上的元素为 1，所有其他元素为 0
+        selfMatrix = Matrix4x4.identity;
+        //移动因子
+        selfMatrix.m03 = 3;
+        selfMatrix.m13 = 4;
+        selfMatrix.m23 = 5;
+        //矩阵位移操作
+        v4 = selfMatrix * v4;
+        transform.position = new Vector3(v4.x, v4.y, v4.z);
+        unityMatrix.SetTRS(transform.position, transform.rotation, transform.localScale);
+}
+
+​旋转矩阵
+void rotate(){
+        //它的主对角线上的元素为 1，所有其他元素为 0
+        selfMatrix = Matrix4x4.identity;
+        float cosPositive = Mathf.Cos(angle * Mathf.Deg2Rad);
+        float sinPositive = Mathf.Sin(angle * Mathf.Deg2Rad);
+        float sinNegative = -sinPositive;
+        //对应 X、Y、Z的旋转
+        if (axle == Axle.X)
+        {
+            selfMatrix.m11 = cosPositive;
+            selfMatrix.m12 = sinNegative;
+            selfMatrix.m21 = sinPositive;
+            selfMatrix.m22 = cosPositive;
+        }
+        else if (axle == Axle.Y)
+        {
+            selfMatrix.m00 = cosPositive;
+            selfMatrix.m02 = sinPositive;
+            selfMatrix.m20 = sinNegative;
+            selfMatrix.m22 = cosPositive;
+        }
+        else
+        {
+            selfMatrix.m00 = cosPositive;
+            selfMatrix.m01 = sinNegative;
+            selfMatrix.m10 = sinPositive;
+            selfMatrix.m11 = cosPositive;
+        }
+        // 求出旋转的四元数
+        float qw = Mathf.Sqrt(1f + selfMatrix.m00 + selfMatrix.m11 + selfMatrix.m22)/2;
+        float w = 4 * qw;
+        float qx = (selfMatrix.m21 - selfMatrix.m12)/w;
+        float qy = (selfMatrix.m02 - selfMatrix.m20)/w;
+        float qz = (selfMatrix.m10 - selfMatrix.m01)/w;
+        transform.rotation = new Quaternion(qx, qy, qz, qw);
+        unityMatrix.SetTRS(transform.position, transform.rotation, transform.localScale);
+}
+
+缩放矩阵
+void scale(){
+        //设置当前对象大小
+        Vector4 v4 = new Vector4(transform.localScale.x, transform.localScale.y, transform.localScale.z, 1);
+        //它的主对角线上的元素为 1，所有其他元素为 0
+        selfMatrix = Matrix4x4.identity;
+        //缩放因子
+        selfMatrix.m00 = 1;
+        selfMatrix.m11 = 2;
+        selfMatrix.m22 = 3;
+        //矩阵缩放操作
+        v4 = selfMatrix * v4;
+        transform.localScale = new Vector3(v4.x, v4.y, v4.z);
+}
+​//缩放矩阵是矩阵表现物体大小变换的矩阵。如果缩放因子小于1，表现为物体缩小；如果大于1，则表现为物体扩大，如果等于1则不发生变化。
+
+四元数的几何意义，解决了什么问题？
+四元数是复数的不可交换延伸。如把四元数的集合考虑成多维实数空间的话，四元数就代表着一个四维空间，相对于复数为二维空间。 
+作为用于描述现实空间的坐标表示方式，人们在复数的基础上创造了四元数并以a+bi+cj+dk的形式说明空间点所在位置。
+解决了万向节死锁的问题。
+
+​万向节死锁怎么模拟，出现的现象是什么？
+有一个平行于 x 轴的向量,我们 先将它饶 y 旋转直到它平行于 z 轴,这时,我们会发现任何饶 z 的旋转都改变不了向量的方向, 即万向节死锁。
+
+考考你
+什么是欧拉角？
+欧拉角提供一种非常直观的方式用来描述旋转——它使用3个分离的转角，把一个旋转分解成三次绕不同轴地旋转。
+分为静态欧拉角和动态欧拉角。
+
+帮帮我
+Unity中，用什么存储四元数信息？
