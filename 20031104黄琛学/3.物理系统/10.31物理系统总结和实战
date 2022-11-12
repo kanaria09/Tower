@@ -1,28 +1,13 @@
 课堂练习代码以及其产生的现象总结：
-using UnityEngine; 
-public class Player : MonoBehaviour { 
-    Rigidbody rigid; int layerMask; 
- // Start is called before the first frame update void Start() 
-    { rigid = GetComponent(); 
-      Debug.Log(rigid.gameObject.name); 
-      layerMask = LayerMask.GetMask("Water", "Player", "wape", "enemy"); // 设置重心 
-      rigid.centerOfMass = new Vector3(0.5f, 1, 0.5f); 
-      Debug.Log("Center of Mass : " + rigid.centerOfMass.ToString()); } 
-     //private void FixedUpdate() 
-     //{ 
-         //Debug.Log("FixedUpdate delta time : " + Time.fixedDeltaTime);
 
-        // Update is called once per frame
+质心
+void Start () {
+    rigid = GetComponent<Rigidbody>();
+    // 设置centerOfMass，指定重心
+    rigid.centerOfMass = new Vector3(0, -1, 0);
+}
 
-void Update() { //Debug.Log("Update delta time : " + Time.deltaTime);
-
-   // 施加力使物体跳跃
-   if (Input.GetButtonDown("Jump"))
-   {
-       rigid.velocity = new Vector3(rigid.velocity.x, 0, rigid.velocity.z);
-       rigid.AddForce(new Vector3(0, 100, 0));
-   }
-   
+鼠标射线检测
    // 射线与指定层碰撞
    if (Input.GetKeyDown(KeyCode.R))
    {
@@ -43,6 +28,16 @@ void Update() { //Debug.Log("Update delta time : " + Time.deltaTime);
        }
 
    }
+   Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+RaycastHit hitInfo;
+if (Input.GetMouseButtonDown(0) && Physics.Raycast(mouseRay, out hitInfo, 50))
+{
+    Debug.Log("Click " + hitInfo.collider.gameObject.name);
+    // 绘制点击点
+    Debug.DrawRay(hitInfo.point, hitInfo.normal * 5, Color.green, 20, false);
+}
+
+施加力的方式
    // 施加的力高于重心
     if(Input.GetKeyDown(KeyCode.H))
     {
@@ -53,7 +48,6 @@ void Update() { //Debug.Log("Update delta time : " + Time.deltaTime);
    {
         rigid.AddForceAtPosition(new Vector3(-10, 0, 0), new Vector3(0.5f, 1f, 0.5f));
    }
-
     // 施加的力低于重心
    if(Input.GetKeyDown(KeyCode.L))
    {
@@ -65,17 +59,7 @@ void Update() { //Debug.Log("Update delta time : " + Time.deltaTime);
        rigid.angularVelocity = new Vector3(0, 60, 0);
     }
    
-   //检查鼠标点击的物体
-   Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-   RaycastHit hitInfo;
-
-   //鼠标左键被按下
-   if (Input.GetMouseButtonDown(0) && Physics.Raycast(mouseRay, out hitInfo, 50))
-   {
-       Debug.Log("Click " + hitInfo.collider.gameObject.name);
-       // 绘制点击点
-       Debug.DrawRay(hitInfo.point, hitInfo.normal * 5, Color.green, 2, false);
-   }
+屏幕坐标与视图坐标、世界坐标的转换
    // 按下鼠标左键
    if (Input.GetMouseButtonDown(0))
    {
@@ -113,17 +97,6 @@ void Update() { //Debug.Log("Update delta time : " + Time.deltaTime);
 
 控制物体运动的方法：
 直接操作坐标，使用物理引擎操作，使用角色控制器
-
-物理系统的编程:
-获取刚体
-修改速度
-施加力
-层与射线
-修改物理材质
-FixedUpdate
-修改角速度
-质心
-刚体约束
 
 考考你
 发生碰撞的必要条件有哪些？
