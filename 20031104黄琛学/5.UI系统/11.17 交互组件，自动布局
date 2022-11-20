@@ -1,0 +1,59 @@
+文本控件
+在 Hierarchy 窗口右键，选择 UI 列表里的 Text 控件，即可创建 Text 控件，选中创建的 Text 控件，按键盘【T】键，可以调整 Text 控件的大小和位置
+
+​按钮控件
+按钮控件可以响应于用户的点击并触发启动或确认操作，比如Web表单上的Submit及Cancel按钮。
+主要有三大属性：Interactable / Transition / Navigation
+
+​Toggle控件和Toggle组
+Toggle(开关)是Unity中UGUI里面的一个组件。一般用于做单选开关。比如写一个飞机大战的游戏，我们选择战机就可以用到这个组件。
+不是一个toggle，而是多个toggle在一起的情况，那就需要用到ToggleGroup(开关组)这个组件了
+
+Slider控件，使用Slider控件控制图片
+
+​InputField控件
+InputField（输入域）：为文本输入控件
+有
+Text Component（文本组件）：此输入域的文本显示组件，需带有Text组件。
+Text（文本）：此输入域的初始值。
+Character Limit（字符限制）：限定此输入域最大输入的字符数，0为不限制。
+Content Type（内容类型）：限定此输入域的内容类型，包括数字、密码等。
+Line Type（换行方式）：当输入的内容超过输入域边界时；
+single Line（单一行）：超过边界也不换行，继续延伸此行，输入域中的内容只有一行；
+multi Line Submit（多行）：超过边界则换行，输入域中内容有多行；
+multi Line Newline（多行）：超过边界则新建换行，输入域中内容有多行。
+Placeholder（位置标示）：此输入域的输入位控制符，需带有Text组件。
+
+​Scroll View控件
+ScrollView可直接通过鼠标右键点击Hierarchy视图，查找UI——ScrollView进行创建。
+ScrollView的使用基本用于下拉列表类的功能实现，即在 UI 中显示的可滑动的视图
+
+​自动布局
+​布局元素
+布局控制器将分配最小大小属性（Min Width、Min Height）。
+如果有足够的可用空间，布局控制器将分配偏好大小属性（Preferred Width、Preferred Height）。
+如果有额外的可用空间，布局控制器将分配灵活大小属性（Flexible Width、Flexible Height）。
+
+​布局组
+​水平布局组
+Horizontal Layout Group：
+水平布局方式，子元素只会按照水平的方式排列，就算子元素太多超过父元素以后不会换行排列
+
+​竖直布局组
+垂直布局的方式，与Horizontal Layout Group相对应，同样当元素超过父元素也不会换行
+
+​网格布局组
+Grid Layout Group：
+Grid Layout Group即网格布局组，听名字也可以理解就是可以按照面的方式来进行排版
+Grid Layout Group这种方式的布局，就是可以让元素换行的布局，就是综合Horizontal Layout Group与Vertical Layout Group这两种布局的综合体
+
+​内容适配器
+内容大小适配器充当布局控制器，可用于控制其自身布局元素的大小。
+大小由游戏对象上布局元素组件提供的最小大小或偏好大小确定。此类布局元素可以是图像或文本组件、布局组或布局元素组件。
+
+考考你：
+当调整矩形变换的大小时，大小调整是围绕什么进行的？
+轴心
+​
+帮帮我：
+Slider控件
