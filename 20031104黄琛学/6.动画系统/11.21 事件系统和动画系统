@@ -4,10 +4,63 @@ EventSystem负责管理，BaseInputModule负责输入，BaseRaycaster负责确�
 
 ​事件处理函数的四种实现方式
 通过脚本实现事件处理函数
-​动态添加事件处理函数
-​通过事件触发器添加事件处理函数
-​动态添加事件触发器
+void Btn1(){
+        Debug.Log("按钮1");
+}
+void Btn3(){
+        Debug.Log("按钮3");
+        Debug.Log("删除按钮3的响应函数");
+        Button btn = transform.GetChild(2).GetComponent<Button>();
+        btn.onClick.RemoveAllListeners();
+}
+void Start(){
+        Button btn;
+        // 获取3个子按钮，分别添加OnClick事件
+        btn = transform.GetChild(0).GetComponent<Button>();
+        btn.onClick.AddListener(Btn1);
+        // 用lambda表达式写也是一样的
+        btn = transform.GetChild(1).GetComponent<Button>();
+        btn.onClick.AddListener( () => { Debug.Log("按钮2"); });
+        btn = transform.GetChild(2).GetComponent<Button>();
+        btn.onClick.AddListener(Btn3);
+}
 
+​动态添加事件处理函数
+void Start(){
+        Debug.Log("Add event trigger for button1");
+        // ---- 先给第1个按钮添加EventTrigger----
+        EventTrigger et1 = transform.GetChild(0).gameObject.AddComponent<EventTrigger>();
+        et1.triggers = new List<EventTrigger.Entry>();
+        EventTrigger.Entry entry1 = new EventTrigger.Entry();
+        // 指定事件类型，PointerDown 指鼠标按下事件
+        entry1.eventID = EventTriggerType.PointerDown;
+        entry1.callback.AddListener(OnEvent);   //  响应函数为OnBtnEvent
+        // 将Entry添加到事件列表中，可以添加多个
+        et1.triggers.Add(entry1);
+         Debug.Log("Add event trigger for button1");
+        // ---- 再给第2个按钮添加一些事件----
+        EventTrigger et2 = transform.GetChild(1).gameObject.AddComponent<EventTrigger>();
+        et2.triggers = new List<EventTrigger.Entry>();
+        EventTrigger.Entry entry2 = new EventTrigger.Entry();
+        entry2.eventID = EventTriggerType.PointerExit;  //  鼠标离开事件
+        entry2.callback.AddListener(OnEvent);
+        EventTrigger.Entry entry2_2 = new EventTrigger.Entry();
+        entry2_2.eventID = EventTriggerType.PointerEnter;  // 鼠标进入事件
+        entry2_2.callback.AddListener(OnEvent);
+        et2.triggers.Add(entry2);
+        et2.triggers.Add(entry2_2);
+}
+
+​通过事件触发器添加事件处理函数
+// 将基类变量转为派生类变量
+PointerEventData pevt = evt as PointerEventData;
+// 如果不是鼠标相关的事件，转换会失败
+if (pevt == null){
+      Debug.Log(" 转换PointerEventData失败");
+      return;
+}
+
+​动态添加事件触发器
 ​3. 思考四种实现方式的对应场景
 
 动画系统
@@ -28,6 +81,61 @@ EventSystem负责管理，BaseInputModule负责输入，BaseRaycaster负责确�
 三是设置动画变量。用脚本控制动画变量，就能间接地控制 State Machine 了。
 1. 编辑动画
 2. 编辑动画状态机
+
+代码控制动画
+Play("ation 1"):播放动画，传入参数为动画名字
+
+Stop("ation 1"):停止动画，传入参数为动画名字
+
+CrossFade("ation 1",0.5f):有过度的切换动画，传入参数（动画名字，过度时间）
+
+using UnityEngine;
+using System.Collections;
+public class NewBehaviourScript : MonoBehaviour
+{
+    Animation m_anim;
+    private float scaleW = 1.0f;        //宽度缩放比
+    private float scaleH = 1.0f;        //高度缩放比
+    // Use this for initialization
+    void Start()
+    {
+        //获取动画组件
+        m_anim = GetComponent<Animation>();
+        if (!m_anim.isPlaying)
+        {
+            //若没有动画播放，默认播放New Animation 1动画
+            m_anim.CrossFade("ation 1", 0.2f);
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        scaleW = (float)Screen.width / 800;     //计算宽度缩放比
+        scaleH = (float)Screen.height / 480;    //计算高度缩放比
+    }
+    void OnGUI()
+    {
+        GUI.skin.button.fontSize = (int)(25 * scaleW);//调整按钮字体大小
+
+        if (GUI.Button(new Rect(70 * scaleW, 50 * scaleH, 90 * scaleW, 40 * scaleH), "ation 1"))
+        {
+            m_anim.Play("ation 1");
+        }
+        if (GUI.Button(new Rect(70 * scaleW, 110 * scaleH, 90 * scaleW, 40 * scaleH), "imation"))
+        {
+            m_anim.Play("imation");
+        }
+        if (GUI.Button(new Rect(70 * scaleW, 170 * scaleH, 220 * scaleW, 40 * scaleH), "有过度播放ation 1"))
+        {
+            m_anim.CrossFade("ation 1", 0.5f);
+        }
+        if (GUI.Button(new Rect(70 * scaleW, 230 * scaleH, 220 * scaleW, 40 * scaleH), "有过度播放imation"))
+        {
+            m_anim.CrossFade("imation", 0.5f);
+        }
+    }
+}
 
 考考你
 一个场景中能多少个EventSystem组件？
